@@ -12,6 +12,8 @@ from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
 from flask_caching import Cache
+from werkzeug.middleware.proxy_fix import ProxyFix
+from cachelib.file import FileSystemCache
 
 
 # In[]:
@@ -173,10 +175,11 @@ def update_graph_from_dropdown(dropdown, multi, arglist):
 
     # Get Quantmod Chart
     try:
-        df = web.DataReader(dropdown, 'google', dt.datetime(2016, 1, 1), dt.datetime.now())
+        df = web.DataReader(dropdown, 'yahoo', dt.datetime(2020, 1, 1), dt.datetime.now())
         print('Loading')
         ch = qm.Chart(df)
-    except:
+    except Exception as e:
+        print(e)
         pass
 
     # Get functions and arglist for technical indicators
